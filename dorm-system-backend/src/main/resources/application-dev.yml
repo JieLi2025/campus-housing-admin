@@ -1,0 +1,23 @@
+# 开发环境配置
+# 数据库配置使用主配置文件 application.yml 中的设置
+# 这里只配置开发环境特有的设置
+
+# MyBatis Plus 配置 - 关闭 SQL 日志输出（减少控制台干扰）
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
+# 日志配置 - 只显示重要日志
+logging:
+  level:
+    root: WARN
+    com.campus.dorm: WARN
+    com.campus.dorm.mapper: WARN
+    # 关闭JWT拦截器的DEBUG日志
+    com.campus.dorm.interceptor: WARN
+    # 关闭Spring框架日志
+    org.springframework: WARN
+    org.springframework.web: WARN
+    org.mybatis: WARN
+    com.zaxxer.hikari: WARN
+

@@ -1,0 +1,24 @@
+# 生产环境配置
+spring:
+  # 数据库配置 - 生产环境请修改为实际配置
+  datasource:
+    url: jdbc:mysql://your-prod-host:3306/dorm_system?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: prod_user
+    password: prod_password
+    
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 50
+
+# MyBatis Plus 配置 - 生产环境不显示 SQL
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
+# 日志配置 - 生产环境
+logging:
+  level:
+    root: WARN
+    com.campus.dorm: INFO
+    com.campus.dorm.mapper: INFO
+

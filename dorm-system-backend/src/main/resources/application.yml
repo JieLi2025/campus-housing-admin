@@ -1,0 +1,166 @@
+# Spring Boot 主配置文件
+spring:
+  application:
+    name: dorm-system
+  
+  # 激活的配置文件 (dev/prod)
+  profiles:
+    active: dev
+  
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dorm_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 
+    
+    # HikariCP 连接池配置
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DormHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  
+  # Redis 配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      database: 0
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+  
+  # 邮件配置
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: your-email@qq.com
+    password: your-smtp-password
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  
+  # 文件上传配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+  
+  # Jackson 配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# MyBatis Plus 配置
+mybatis-plus:
+  # Mapper XML 文件位置
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # 实体类扫描路径
+  type-aliases-package: com.campus.dorm.entity
+  # 全局配置
+  global-config:
+    db-config:
+      # 主键类型 (AUTO: 数据库自增)
+      id-type: auto
+      # 逻辑删除配置
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      # 字段填充策略
+      insert-strategy: not_null
+      update-strategy: not_null
+  # 配置
+  configuration:
+    # 日志实现（禁用 SQL 日志输出）
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    # 驼峰转下划线
+    map-underscore-to-camel-case: true
+    # 缓存
+    cache-enabled: false
+    # 懒加载
+    lazy-loading-enabled: true
+
+# Swagger/OpenAPI 配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.campus.dorm.controller
+
+# 日志配置
+logging:
+  level:
+    root: ERROR
+    # 关闭所有框架日志
+    org.springframework: ERROR
+    org.springframework.boot: ERROR
+    org.springframework.boot.devtools: ERROR
+    org.apache.ibatis: ERROR
+    org.apache.catalina: ERROR
+    com.zaxxer.hikari: ERROR
+    org.mybatis: ERROR
+    org.springframework.web.socket: ERROR
+    # 项目日志 - 临时开启 INFO 级别用于调试
+    com.campus.dorm: INFO
+    com.campus.dorm.mapper: ERROR
+  pattern:
+    console: '%d{HH:mm:ss.SSS} %-5level %c{0} - %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n'
+  file:
+    name: logs/dorm-system.log
+    max-size: 10MB
+    max-history: 30
+
+# 自定义配置
+app:
+  # JWT 配置
+  jwt:
+    secret: campus-dorm-system-jwt-secret-key-2024
+    expiration: 2592000000  # 30天 (毫秒) - 开发环境用，方便调试
+    header: Authorization
+    prefix: Bearer 
+  
+  # 文件上传路径
+  upload:
+    path: /uploads
+    max-size: 10485760  # 10MB
+  
+  # 系统配置
+  system:
+    name: 校园宿舍管理系统
+    version: 1.0.0
+

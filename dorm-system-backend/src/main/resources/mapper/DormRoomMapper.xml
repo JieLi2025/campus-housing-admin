@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dorm.mapper.DormRoomMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="DormRoomVOMap" type="com.campus.dorm.vo.DormRoomVO">
+        <id column="id" property="id"/>
+        <result column="building_id" property="buildingId"/>
+        <result column="building_name" property="buildingName"/>
+        <result column="building_type" property="buildingType"/>
+        <result column="room_number" property="roomNumber"/>
+        <result column="floor" property="floor"/>
+        <result column="room_type" property="roomType"/>
+        <result column="bed_count" property="bedCount"/>
+        <result column="available_beds" property="availableBeds"/>
+        <result column="major_name" property="majorName"/>
+        <result column="class_name" property="className"/>
+        <result column="class_segment" property="classSegment"/>
+    </resultMap>
+    
+    <!-- 获取楼栋的所有房间 -->
+    <select id="getRoomsByBuildingId" resultMap="DormRoomVOMap">
+        SELECT 
+            r.id,
+            r.building_id,
+            b.building_name,
+            b.building_type,
+            r.room_number,
+            r.floor,
+            r.room_type,
+            r.bed_count,
+            r.available_beds,
+            r.major_name,
+            r.class_name,
+            r.class_segment
+        FROM room r
+        LEFT JOIN building b ON r.building_id = b.id
+        WHERE r.building_id = #{buildingId}
+        ORDER BY r.floor ASC, r.room_number ASC
+    </select>
+    
+    <!-- 获取房间详情 -->
+    <select id="getRoomDetailById" resultMap="DormRoomVOMap">
+        SELECT 
+            r.id,
+            r.building_id,
+            b.building_name,
+            b.building_type,
+            r.room_number,
+            r.floor,
+            r.room_type,
+            r.bed_count,
+            r.available_beds,
+            r.major_name,
+            r.class_name,
+            r.class_segment
+        FROM room r
+        LEFT JOIN building b ON r.building_id = b.id
+        WHERE r.id = #{roomId}
+    </select>
+    
+    <!-- 批量插入房间 -->
+    <insert id="batchInsertRooms" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO room (building_id, room_number, floor, room_type, bed_count, available_beds)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.buildingId}, #{item.roomNumber}, #{item.floor}, #{item.roomType}, 
+             #{item.bedCount}, #{item.availableBeds})
+        </foreach>
+    </insert>
+</mapper>
